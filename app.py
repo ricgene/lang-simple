@@ -4,6 +4,7 @@ from langgraph.graph import StateGraph, END
 import json
 import os
 from dotenv import load_dotenv
+from typing import Dict, List, TypedDict
 
 # Load environment variables from .env file
 load_dotenv()
@@ -15,16 +16,20 @@ if not os.getenv("OPENAI_API_KEY"):
 # Initialize the LLM - will use OPENAI_API_KEY from loaded env vars
 llm = ChatOpenAI(model="gpt-3.5-turbo")
 
+# Define the state type for the graph
+class GraphState(TypedDict):
+    messages: List
+
 # Define node functions
 def call_llm(state):
     """Call the LLM with the current messages."""
     response = llm.invoke(state["messages"])
     updated_messages = state["messages"] + [response]
-    
+        
     return {"messages": updated_messages}
 
-# Build the graph - using dict-based state
-builder = StateGraph()
+# Build the graph - provide the state schema
+builder = StateGraph(state_schema=GraphState)
 
 # Add nodes
 builder.add_node("llm", call_llm)
