@@ -1,72 +1,76 @@
 {
-  "name": "simple_agent",
-  "description": "A simple LangGraph agent that processes queries",
-  "version": "0.1.0",
-  "runtime": "python3.11",
-  "build": {
-    "python_packages": [
-      "langchain>=0.1.0",
-      "langchain-openai>=0.0.2",
-      "langgraph>=0.0.20"
-    ]
-  },
-  "entrypoint": "app:graph",
-  "environment_variables": {
-    "required": [
-      "OPENAI_API_KEY"
-    ],
-    "optional": []
-  },
-  "api": {
-    "input_schema": {
-      "type": "object",
-      "properties": {
-        "messages": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "content": {
-                "type": "string"
-              },
-              "type": {
-                "type": "string",
-                "enum": ["human", "ai"]
-              }
-            },
-            "required": ["content", "type"]
-          }
-        }
-      },
-      "required": ["messages"]
+    "name": "simple_agent",
+    "description": "A simple LangGraph agent that processes queries",
+    "version": "0.1.0",
+    "runtime": "python3.11",
+    "build": {
+      "python_packages": [
+        "langchain>=0.1.0",
+        "langchain-openai>=0.0.2",
+        "langgraph>=0.0.20"
+      ]
     },
-    "output_schema": {
-      "type": "object",
-      "properties": {
-        "messages": {
-          "type": "array",
-          "items": {
+    "graphs": {
+      "simple_agent": {
+        "entrypoint": "app:graph",
+        "environment_variables": {
+          "required": [
+            "OPENAI_API_KEY"
+          ],
+          "optional": []
+        },
+        "api": {
+          "input_schema": {
             "type": "object",
             "properties": {
-              "content": {
-                "type": "string"
-              },
-              "type": {
-                "type": "string",
-                "enum": ["human", "ai"]
+              "messages": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "content": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["human", "ai"]
+                    }
+                  },
+                  "required": ["content", "type"]
+                }
               }
             },
-            "required": ["content", "type"]
-          }
-        },
-        "next_steps": {
-          "type": "array",
-          "items": {
-            "type": "string"
+            "required": ["messages"]
+          },
+          "output_schema": {
+            "type": "object",
+            "properties": {
+              "messages": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "content": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["human", "ai"]
+                    }
+                  },
+                  "required": ["content", "type"]
+                }
+              },
+              "next_steps": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": ["messages"]
           }
         }
-      },
-      "required": ["messages"]
+      }
     }
   }
-}
