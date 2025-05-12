@@ -3,8 +3,16 @@ from langchain_openai import ChatOpenAI
 from langgraph.graph import StateGraph, END
 import json
 import os
+from dotenv import load_dotenv
 
-# Initialize the LLM
+# Load environment variables from .env file
+load_dotenv()
+
+# Check if the API key exists
+if not os.getenv("OPENAI_API_KEY"):
+    raise ValueError("OPENAI_API_KEY not found in environment variables. Please add it to your .env file.")
+
+# Initialize the LLM - will use OPENAI_API_KEY from loaded env vars
 llm = ChatOpenAI(model="gpt-3.5-turbo")
 
 # Define node functions
@@ -13,15 +21,7 @@ def call_llm(state):
     response = llm.invoke(state["messages"])
     updated_messages = state["messages"] + [response]
     
-    # Try to extract next steps from the response
-    try:
-        # Simple approach: assume the LLM returns JSON-like text with steps
-        next_steps_text = response.content.split("Next steps:")[1].strip()
-        next_steps = json.loads(next_steps_text)
-    except:
-        next_steps = []
-        
-    return {"messages": updated_messages, "next_steps": next_steps}
+    return {"messages": updated_messages}
 
 # Build the graph - using dict-based state
 builder = StateGraph()
