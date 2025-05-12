@@ -41,7 +41,7 @@ builder.set_entry_point("llm")
 builder.add_edge("llm", END)
 
 # Compile the graph
-graph = builder.compile()
+app = builder.compile()
 
 # Run the agent - for local testing
 def run_agent(query):
